@@ -1,6 +1,7 @@
 import { Get, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import Event from './entities/event.entity';
+import Workshop from './entities/workshop.entity';
 
 @Injectable()
 export class EventsService {
@@ -89,10 +90,16 @@ export class EventsService {
     ]
     ```
      */
-
-  @Get('events')
-  async getEventsWithWorkshops() {
-    throw new Error('TODO task 1');
+async getEventsWithWorkshops() {
+    return await Event.findAll({
+      attributes: ['id',  'name','createdAt'],
+      include: [
+        {
+          model: Workshop,
+          attributes: ['id', 'start', 'end', 'eventId', 'name', 'createdAt'],
+        }
+      ]
+    })
   }
 
   /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
